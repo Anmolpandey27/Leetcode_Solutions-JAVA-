@@ -1,32 +1,36 @@
 class MyQueue {
+    Stack<Integer> ip, op;
 
-	private final Deque<Integer> stack = new ArrayDeque<>();
-	private final Deque<Integer> temp = new ArrayDeque<>();
-	public MyQueue() {}
-	public void push(int x) {
-		stack.push(x);
-	}
-	public int pop() {
-		while (stack.size() > 1)
-			temp.push(stack.pop());
+    public MyQueue() {
+        ip = new Stack<>();
+        op = new Stack<>();
+    }
 
-		var val = stack.pop();
-		while (!temp.isEmpty())
-			stack.push(temp.pop());
+    public void push(int x) {
+        ip.push(x);
+    }
 
-		return val;
-	}
-	public int peek() {
-		while (stack.size() > 1)
-			temp.push(stack.pop());
+    public int pop() {
+        if (op.isEmpty()) {
+            while (!ip.isEmpty()) {
+                op.push(ip.pop());
+            }
+        }
 
-		var val = stack.peek();
-		while (!temp.isEmpty())
-			stack.push(temp.pop());
+        return op.pop();
+    }
 
-		return val;
-	}
-	public boolean empty() {
-		return stack.isEmpty();
-	}
+    public int peek() {
+        if (op.isEmpty()) {
+            while (!ip.isEmpty()) {
+                op.push(ip.pop());
+            }
+        }
+
+        return op.peek();
+    }
+
+    public boolean empty() {
+        return ip.isEmpty() && op.isEmpty();
+    }
 }
